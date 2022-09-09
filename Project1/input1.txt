@@ -25,4 +25,13 @@ I 0 4 professor
 I 2 4 professor
 E 1 2
 R 2 4 
+I 2 3 professor
+I 3 4 colleague
+I 4 5 villian
 D
+E 0 1
+E 1 2
+E 2 3
+E 3 4 
+E 4 5
+E 3 5

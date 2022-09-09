@@ -2,6 +2,11 @@
 #include <string>
 using namespace std;
 
+// Khoi Trinh
+// DSA 5005
+// Project 1
+// 09.09.2022
+
 class Node {
 protected:
 	int nodeNumber; // field to store node's number
@@ -192,7 +197,7 @@ bool GraphDB::isAnEdge(int u, int v) {
 		Edge thisEdge = myEdges[i];
 		Node nodeU = myEdges[i].getu();
 		Node nodeV = myEdges[i].getv();
-		string thisEdgeInfo = thisEdge.getEdgeInfo();
+		// Find the edge
 		if (nodeU.getNodeNumber() == u && nodeV.getNodeNumber() == v) {
 			cout << "Edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
 			isEdge = true;
@@ -215,8 +220,8 @@ void GraphDB::addEdge(Edge& newEdge) { // Similar to setEdge
 		setEdge(newEdge);
 	}
 	else {
-		// Increase by 10
-		int difference = 10;
+		// Increase by 1 every time
+		int difference = 1;
 		// Update maxEdges to a larger number
 		maxEdges = maxEdges + difference;
 		// Expand array
@@ -234,13 +239,14 @@ void GraphDB::addEdge(Edge& newEdge) { // Similar to setEdge
 	}
 }
 void GraphDB::deleteEdge(int u, int v) {
-	// Currently it messes indices up by 1
 	cout << "Removing " << u << " " << v << endl;
+	// Create a temp array with the size of maxEdges
 	Edge* tempEdge = new Edge[maxEdges];
 	for (int i = 0; i < numEdges; ++i) {
 		Edge thisEdge = myEdges[i];
 		Node nodeU = myEdges[i].getu();
 		Node nodeV = myEdges[i].getv();
+		// Find the edge to be remove
 		if (nodeU.getNodeNumber() == u && nodeV.getNodeNumber() == v) {
 			// Fill first part of temp, skip i
 			for (int j = 0; j < i; ++j) {
@@ -249,6 +255,8 @@ void GraphDB::deleteEdge(int u, int v) {
 			}
 			// Fill the rest of temp
 			for (int j = i + 1; j < numEdges; ++j) {
+				// Need j - 1 for tempEdge otherwise the 
+				// new array will have an empty spot
 				tempEdge[j - 1] = myEdges[j];
 			}
 			break;
