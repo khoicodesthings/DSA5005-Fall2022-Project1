@@ -120,6 +120,7 @@ public:
 	Edge* getEdgeInfo(int u, int v);
 	// operations
 	bool isAnEdge(int u, int v); // is this edge existent
+	bool edgeChecker(int u, int v);
 	void addEdge(Edge& newEdge); // add an edge
 	void deleteEdge(int u, int v); // delete/remove the edge
 	void display(); // Display the database
@@ -190,8 +191,7 @@ Edge* GraphDB::getEdgeInfo(int u, int v) {
 		}
 	}
 }
-
-bool GraphDB::isAnEdge(int u, int v) {
+bool GraphDB::edgeChecker(int u, int v) {
 	bool isEdge = false;
 	for (int i = 0; i < numEdges; ++i) {
 		Edge thisEdge = myEdges[i];
@@ -199,7 +199,7 @@ bool GraphDB::isAnEdge(int u, int v) {
 		Node nodeV = myEdges[i].getv();
 		// Find the edge
 		if (nodeU.getNodeNumber() == u && nodeV.getNodeNumber() == v) {
-			cout << "Edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
+			// cout << "Edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
 			isEdge = true;
 			return isEdge;
 		}
@@ -209,7 +209,17 @@ bool GraphDB::isAnEdge(int u, int v) {
 		}
 	}
 	// If the loop finishes and no edge found, print this
-	cout << "No edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
+	// cout << "No edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
+	return isEdge;
+}
+bool GraphDB::isAnEdge(int u, int v) {
+	bool isEdge = edgeChecker(u, v);
+	if (isEdge == true) {
+		cout << "Edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
+	}
+	else {
+		cout << "No edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
+	}
 	return isEdge;
 }
 void GraphDB::addEdge(Edge& newEdge) { // Similar to setEdge
@@ -239,35 +249,43 @@ void GraphDB::addEdge(Edge& newEdge) { // Similar to setEdge
 	}
 }
 void GraphDB::deleteEdge(int u, int v) {
-	cout << "Removing " << u << " " << v << endl;
-	// Create a temp array with the size of maxEdges
-	Edge* tempEdge = new Edge[maxEdges];
-	for (int i = 0; i < numEdges; ++i) {
-		Edge thisEdge = myEdges[i];
-		Node nodeU = myEdges[i].getu();
-		Node nodeV = myEdges[i].getv();
-		// Find the edge to be remove
-		if (nodeU.getNodeNumber() == u && nodeV.getNodeNumber() == v) {
-			// Fill first part of temp, skip i
-			for (int j = 0; j < i; ++j) {
-				//cout << "Filling first half" << endl;
-				tempEdge[j] = myEdges[j];
+	bool isEdge = edgeChecker(u, v);
+	if (isEdge == true) {
+		// If edge exists, delete it
+		cout << "Removing " << u << " " << v << endl;
+		// Create a temp array with the size of maxEdges
+		Edge* tempEdge = new Edge[maxEdges];
+		for (int i = 0; i < numEdges; ++i) {
+			Edge thisEdge = myEdges[i];
+			Node nodeU = myEdges[i].getu();
+			Node nodeV = myEdges[i].getv();
+			// Find the edge to be remove
+			if (nodeU.getNodeNumber() == u && nodeV.getNodeNumber() == v) {
+				// Fill first part of temp, skip i
+				for (int j = 0; j < i; ++j) {
+					//cout << "Filling first half" << endl;
+					tempEdge[j] = myEdges[j];
+				}
+				// Fill the rest of temp
+				for (int j = i + 1; j < numEdges; ++j) {
+					// Need j - 1 for tempEdge otherwise the 
+					// new array will have an empty spot
+					tempEdge[j - 1] = myEdges[j];
+				}
+				break;
 			}
-			// Fill the rest of temp
-			for (int j = i + 1; j < numEdges; ++j) {
-				// Need j - 1 for tempEdge otherwise the 
-				// new array will have an empty spot
-				tempEdge[j - 1] = myEdges[j];
-			}
-			break;
 		}
+		// Decrease numEdges by 1
+		numEdges = numEdges - 1;
+		// Delete old array
+		delete[] myEdges;
+		// Assign new array pointer 
+		myEdges = tempEdge;
 	}
-	// Decrease numEdges by 1
-	numEdges = numEdges - 1;
-	// Delete old array
-	delete[] myEdges;
-	// Assign new array pointer 
-	myEdges = tempEdge;
+	else {
+		// If edge does not exist, print a statement
+		cout << "Removing " << u << " " << v << " but this edge does not exist." << endl;
+	}
 }
 
 void GraphDB::display() {
