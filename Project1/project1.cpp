@@ -199,7 +199,6 @@ bool GraphDB::edgeChecker(int u, int v) {
 		Node nodeV = myEdges[i].getv();
 		// Find the edge
 		if (nodeU.getNodeNumber() == u && nodeV.getNodeNumber() == v) {
-			// cout << "Edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
 			isEdge = true;
 			return isEdge;
 		}
@@ -208,8 +207,6 @@ bool GraphDB::edgeChecker(int u, int v) {
 			continue;
 		}
 	}
-	// If the loop finishes and no edge found, print this
-	// cout << "No edge exists between " << myNodes[u].getNodeInfo() << " and " << myNodes[v].getNodeInfo() << endl;
 	return isEdge;
 }
 bool GraphDB::isAnEdge(int u, int v) {
