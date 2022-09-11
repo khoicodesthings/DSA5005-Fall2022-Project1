@@ -299,17 +299,19 @@ void GraphDB::display() {
 
 // Main function, where the program is run
 int main() {
-	int numNodes;
-	int maxEdges;
-	int nodeNum;
-	char command;
-	int u, v;
+	// Create some variables
+	int numNodes; // Store the number of nodes
+	int maxEdges; // Store the maximum number of edges
+	int nodeNum; // Store the node number to be read in
+	char command; // Store the command to be read in
+	int u, v; // Store each node of the edges
 	
-	string nodeLabel;
+	string nodeLabel; // Store the information of each node
 
-	cin >> numNodes;
-	cin >> maxEdges;
+	cin >> numNodes; // read in numNodes from input file
+	cin >> maxEdges; // read in maxEdges from input file
 
+	// Display out
 	cout << "numNodes: " << numNodes << endl;
 	cout << "maxEdges: " << maxEdges << endl;
 
@@ -319,10 +321,14 @@ int main() {
 	
 	// Add the nodes to the myNodes array
 	for (int i = 0; i < numNodes; i++) {
+		// Read in node number and node info
 		cin >> nodeNum >> nodeLabel;
+		// Create new node object
 		Node* addNode = new Node();
+		// Set the node number and info
 		addNode->setNodeNumber(nodeNum);
 		addNode->setNodeInfo(nodeLabel);
+		// Set the node into the database
 		masterGraph->setNode(*addNode);
 	}
 
@@ -333,26 +339,36 @@ int main() {
 	while (!cin.eof()) {
 		switch (command) {
 			case 'I':{
-				cin >> u >> v >> nodeLabel; // Keep all cin in the main class
+				// Read in node U node V and edge info
+				cin >> u >> v >> nodeLabel;
+				// Create new edge object
 				Edge* newEdge = new Edge();
+				// Get node U and node V from the graph database
 				Node *nodeU = masterGraph->getNode(u);
 				Node *nodeV = masterGraph->getNode(v);
+				// Set node U and node V into edge
 				newEdge->setu(nodeU);
 				newEdge->setv(nodeV);
+				// Set edge information
 				newEdge->setEdgeInfo(nodeLabel);
+				// Print statement
 				cout << "Inserting " << u << " " << v << ": " << nodeLabel << endl;
+				// Add edge to graph database
 				masterGraph->addEdge(*newEdge);
 				break;
 			}
 			case 'E': {
 				// check if there is an edge between 2 nodes
+				// Read in u and v
 				cin >> u >> v;
+				// Call isAnEdge
 				masterGraph->isAnEdge(u, v);
 				break;
 			}
 			case 'R': {
 				// delete edge
 				cin >> u >> v;
+				// Call deleteEdge
 				masterGraph->deleteEdge(u, v);
 				break;
 			}
@@ -364,6 +380,7 @@ int main() {
 			}
 			default: cout << "Holy cow!!" << endl;
 		}
+		// Read in the next command
 		cin >> command;
 	}
 
